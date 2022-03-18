@@ -1,18 +1,17 @@
-import org.apache.tools.ant.filters.ReplaceTokens
 import com.github.jengelman.gradle.plugins.shadow.tasks.ConfigureShadowRelocation
 
 plugins {
     id 'java'
-    id 'org.jetbrains.kotlin.jvm' version '1.4.10'
+    id 'org.jetbrains.kotlin.jvm' version '1.6.10'
     id 'com.diffplug.spotless' version '5.8.2'
-    id 'com.github.johnrengelman.shadow' version '6.0.0'
+    id 'com.github.johnrengelman.shadow' version '7.0.0'
 }
 
 description = 'Check if you current chunk is a slime one!'
 group = 'dev.bloodstone'
-version = '1.0.0'
+version = '1.0.1'
 
-sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
+sourceCompatibility = targetCompatibility = JavaVersion.VERSION_17
 
 repositories {
     mavenLocal()
@@ -25,9 +24,9 @@ repositories {
         url = 'https://oss.sonatype.org/content/groups/public/'
     }
 }
-def cloudVersion = '1.5.0'
+def cloudVersion = '1.6.2'
 dependencies {
-    compileOnly group: 'com.destroystokyo.paper', name: 'paper-api', version: '1.16.5-R0.1-SNAPSHOT'
+    compileOnly group: 'io.papermc.paper', name: 'paper-api', version: '1.18.2-R0.1-SNAPSHOT'
     implementation "org.jetbrains.kotlin:kotlin-stdlib"
     implementation group: 'cloud.commandframework', name: 'cloud-paper', version: cloudVersion
     implementation group: 'cloud.commandframework', name: 'cloud-annotations', version: cloudVersion
@@ -44,11 +43,14 @@ shadowJar {
 }
 
 processResources {
-    from(sourceSets.main.resources.srcDirs) {
-        filter ReplaceTokens, tokens: [
-                version: version,
-                description: description,
-        ]
+    def props = [
+        version: version,
+        description: project.description,
+    ]
+    inputs.properties props
+    filteringCharset 'UTF-8'
+    filesMatching('plugin.yml') {
+        expand props
     }
 }
 
@@ -60,12 +62,12 @@ compileJava {
 
 compileKotlin {
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
         javaParameters = true
     }
 }
 compileTestKotlin {
-    kotlinOptions.jvmTarget = "1.8"
+    kotlinOptions.jvmTarget = "17"
 }
 
 spotless {

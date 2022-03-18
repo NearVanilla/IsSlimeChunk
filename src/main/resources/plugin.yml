@@ -1,6 +1,6 @@
 name: IsSlimeChunk
-version: @version@
+version: ${version}
 main: dev.bloodstone.isslimechunk.IsSlimeChunk
 api-version: 1.16
 authors: [ Prof_Bloodstone ]
-description: @description@
+description: ${description}
