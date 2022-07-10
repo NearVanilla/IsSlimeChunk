@@ -9,7 +9,7 @@ plugins {
 
 description = 'Check if you current chunk is a slime one!'
 group = 'dev.bloodstone'
-version = '1.0.1'
+version = '1.0.2'
 
 sourceCompatibility = targetCompatibility = JavaVersion.VERSION_17
 
@@ -24,9 +24,9 @@ repositories {
         url = 'https://oss.sonatype.org/content/groups/public/'
     }
 }
-def cloudVersion = '1.6.2'
+def cloudVersion = '1.7.0'
 dependencies {
-    compileOnly group: 'io.papermc.paper', name: 'paper-api', version: '1.18.2-R0.1-SNAPSHOT'
+    compileOnly group: 'io.papermc.paper', name: 'paper-api', version: '1.19-R0.1-SNAPSHOT'
     implementation "org.jetbrains.kotlin:kotlin-stdlib"
     implementation group: 'cloud.commandframework', name: 'cloud-paper', version: cloudVersion
     implementation group: 'cloud.commandframework', name: 'cloud-annotations', version: cloudVersion
