@@ -37,5 +37,5 @@ jobs:
       uses: actions/upload-artifact@v2
       if: ${{ success() }}
       with:
-        name: TilePersistence.jar
-        path: 'build/libs/TilePersistence*.jar'
+        name: IsSlimeChunk.jar
+        path: 'build/libs/IsSlimeChunk-*-all.jar'

@@ -27,7 +27,7 @@ jobs:
       - name: Build with Gradle
         run: |
           ./gradlew shadowJar
-          mv -v build/libs/TilePersistence{-*,}.jar
+          mv -v build/libs/IsSlimeChunk{-*-all,}.jar
       - name: Prepare release description
         id: prepare_release_description
         shell: bash
@@ -64,7 +64,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: '${{ steps.create_release.outputs.upload_url }}'
-          asset_path: 'build/libs/TilePersistence.jar'
-          asset_name: TilePersistence.jar
+          asset_path: 'build/libs/IsSlimeChunk.jar'
+          asset_name: IsSlimeChunk.jar
           asset_content_type: application/zip
 
