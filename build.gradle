@@ -9,7 +9,7 @@ plugins {
 
 description = 'Check if you current chunk is a slime one!'
 group = 'dev.bloodstone'
-version = '1.0.3'
+version = '1.0.4'
 
 sourceCompatibility = targetCompatibility = JavaVersion.VERSION_17
 
@@ -17,22 +17,21 @@ repositories {
     mavenLocal()
     maven {
         name = 'papermc'
-        url = 'https://papermc.io/repo/repository/maven-public/'
+        url = 'https://repo.papermc.io/repository/maven-public/'
     }
     maven {
         name = 'sonatype'
         url = 'https://oss.sonatype.org/content/groups/public/'
     }
 }
-def cloudVersion = '1.8.0'
 dependencies {
-    compileOnly group: 'io.papermc.paper', name: 'paper-api', version: '1.19.3-R0.1-SNAPSHOT'
+    compileOnly group: 'io.papermc.paper', name: 'paper-api', version: '1.21-R0.1-SNAPSHOT'
     implementation "org.jetbrains.kotlin:kotlin-stdlib"
-    implementation group: 'cloud.commandframework', name: 'cloud-paper', version: cloudVersion
-    implementation group: 'cloud.commandframework', name: 'cloud-annotations', version: cloudVersion
+    implementation group: 'org.incendo', name: 'cloud-paper', version: '2.0.0-beta.9'
+    implementation group: 'org.incendo', name: 'cloud-annotations', version: '2.0.0-rc.2'
 }
 
-task relocateShadowJar(type: ConfigureShadowRelocation) {
+tasks.register('relocateShadowJar', ConfigureShadowRelocation) {
     target = tasks.shadowJar
     prefix = "${project.property('group')}.${project.property('name').toString().toLowerCase()}.lib"
 }

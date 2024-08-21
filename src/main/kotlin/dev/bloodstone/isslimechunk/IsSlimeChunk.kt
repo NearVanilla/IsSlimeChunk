@@ -18,45 +18,30 @@
 */
 package dev.bloodstone.isslimechunk
 
-import cloud.commandframework.annotations.AnnotationParser
-import cloud.commandframework.annotations.CommandDescription
-import cloud.commandframework.annotations.CommandMethod
-import cloud.commandframework.annotations.CommandPermission
-import cloud.commandframework.arguments.parser.ParserParameters
-import cloud.commandframework.arguments.parser.StandardParameters
-import cloud.commandframework.bukkit.CloudBukkitCapabilities
-import cloud.commandframework.execution.CommandExecutionCoordinator
-import cloud.commandframework.meta.CommandMeta
-import cloud.commandframework.paper.PaperCommandManager
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.command.PluginIdentifiableCommand
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
-import java.util.function.Function
+import org.incendo.cloud.annotations.AnnotationParser
+import org.incendo.cloud.annotations.Command
+import org.incendo.cloud.annotations.CommandDescription
+import org.incendo.cloud.annotations.Permission
+import org.incendo.cloud.bukkit.CloudBukkitCapabilities
+import org.incendo.cloud.execution.ExecutionCoordinator
+import org.incendo.cloud.paper.LegacyPaperCommandManager
 
 public class IsSlimeChunk() : JavaPlugin() {
-    private lateinit var manager: PaperCommandManager<CommandSender>
+    private lateinit var manager: LegacyPaperCommandManager<CommandSender>
     private lateinit var annotationParser: AnnotationParser<CommandSender>
 
     override fun onEnable() {
-        manager = PaperCommandManager(
-            this,
-            CommandExecutionCoordinator.simpleCoordinator(), // Do command execution synchronously
-            Function.identity(),
-            Function.identity(),
-        )
-        if (manager.queryCapability(CloudBukkitCapabilities.BRIGADIER)) {
+        manager = LegacyPaperCommandManager.createNative(this, ExecutionCoordinator.simpleCoordinator())
+
+        if (manager.hasCapability(CloudBukkitCapabilities.BRIGADIER)) {
             manager.registerBrigadier()
         }
-        annotationParser = AnnotationParser(
-            manager,
-            CommandSender::class.java
-        ) { parserParams: ParserParameters ->
-            CommandMeta.simple()
-                .with(CommandMeta.DESCRIPTION, parserParams.get(StandardParameters.DESCRIPTION, "No description"))
-                .build()
-        }
+        annotationParser = AnnotationParser(manager, CommandSender::class.java)
         // Parse commands
         annotationParser.parse(this)
     }
@@ -66,9 +51,9 @@ public class IsSlimeChunk() : JavaPlugin() {
             .removeIf { entry -> (entry.value as? PluginIdentifiableCommand)?.plugin == this }
     }
 
-    @CommandMethod("isSlimeChunk|slime?")
+    @Command("isSlimeChunk|slime?")
     @CommandDescription("Check whether chunk is a slime chunk")
-    @CommandPermission("isslimechunk.self")
+    @Permission("isslimechunk.self")
     private fun isSlimeChunk(player: Player) {
         val isSlime = player.chunk.isSlimeChunk
         player.sendMessage("This chunk ${ if (isSlime) "is" else "is NOT" } a slime chunk.")
